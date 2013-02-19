@@ -30,7 +30,7 @@ main(int argc, char *argv[])
 	jtime -= LAG;
 
 	if(argc > 1 && argv[1][0] == '+') {
-		strcpy(fmt, ++argv[1]);
+		strncpy(fmt, ++argv[1], 25);
 		strftime(buf, sizeof buf, fmt, localtime(&jtime));
 		printf("%s\n", buf);
 	} else
