@@ -1,4 +1,4 @@
-SUBDIRS = jdate
+SUBDIRS = jdate newmail
 
 all:
 	@for i in ${SUBDIRS}; do cd $$i; ${MAKE} || exit; cd ..; done

@@ -1,3 +1,2 @@
-CC = cc
 CFLAGS += -O2
 PREFIX = ${HOME}
