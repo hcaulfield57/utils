@@ -35,7 +35,10 @@ main(int argc, char *argv[])
 	if(argc == 3 && !strcmp(argv[1], "-s"))
 		strncpy(spool, argv[2], 104);
 	else if(argc == 1) {
-		strncpy(spool, getenv("MAIL"), 104);
+		if((strncpy(spool, getenv("MAIL"), 104)) == NULL) {
+			fprintf(stderr, "Usage %s: [ -s spoolfile ]\n", argv[0]);
+			exit(1);
+		}
 	} else {
 		fprintf(stderr, "Usage %s: [ -s spoolfile ]\n", argv[0]);
 		exit(1);
