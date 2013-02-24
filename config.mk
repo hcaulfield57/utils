@@ -1,2 +1,2 @@
-CFLAGS += -O2
+CFLAGS += -O2 -Wall
 PREFIX = ${HOME}
