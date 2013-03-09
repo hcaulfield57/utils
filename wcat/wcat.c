@@ -38,7 +38,7 @@ main(int argc, char *argv[])
 				break;
 		}
 		freeaddrinfo(res);
-		strcpy(buf, request(argv[i]));
+		strlcpy(buf, request(argv[i]), sizeof buf);
 		if(send(sockfd, buf, sizeof buf, 0) == -1)
 			err(1, "send error");
 
