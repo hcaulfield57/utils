@@ -36,7 +36,6 @@ main(int argc, char *argv[])
 			}
 			if(connect(sockfd, p->ai_addr, p->ai_addrlen) == 0)
 				break;
-			close(sockfd);
 		}
 		freeaddrinfo(res);
 		strcpy(buf, request(argv[i]));
