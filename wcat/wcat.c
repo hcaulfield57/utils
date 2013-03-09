@@ -12,8 +12,8 @@ char *request(const char *s);
 int
 main(int argc, char *argv[])
 {
-	int i;
 	int sockfd;
+	int i, error;
 	char buf[1024];
 	struct addrinfo hints;
 	struct addrinfo *res, *p;
@@ -28,7 +28,7 @@ main(int argc, char *argv[])
 		hints.ai_flags = AF_UNSPEC;
 		hints.ai_family = SOCK_STREAM;
 		if(getaddrinfo(argv[i], "http", &hints, &res) == -1)
-			err(1, "getaddrinfo error");
+			errx(1, "getaddrinfo error: %s", gai_strerror(error));
 		for(p = res; p; p = p->ai_next) {
 			if((sockfd = socket(p->ai_family, p->ai_socktype, 
 				p->ai_protocol)) == -1) {
