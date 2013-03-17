@@ -1,4 +1,4 @@
-SUBDIRS = jdate newmail wcat
+SUBDIRS = jdate newmail wcat dircp
 
 all:
 	@for i in ${SUBDIRS}; do cd $$i; ${MAKE} || exit; cd ..; done
