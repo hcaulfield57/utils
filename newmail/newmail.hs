@@ -17,7 +17,10 @@ count h = do
 main :: IO ()
 main = do
     argv <- getArgs
-    mail <- getEnv "MAIL"
+    m <- lookupEnv "MAIL"
+    let mail = case m of
+            Just str -> str
+            Nothing -> ""
     let spool = case argv of
             ("-s":sf:_) -> sf
             _ -> mail
