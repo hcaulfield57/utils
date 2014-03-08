@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Control.Monad (when)
 import Control.Monad.Reader
 import System.Console.GetOpt
 import System.Directory
@@ -19,8 +20,8 @@ dircp (src,dst) = do
     flg <- ask
     srcExists <- lift $ doesDirectoryExist src
     dstExists <- lift $ doesDirectoryExist dst
-    let parents = any (==Parents) flg
-        verbose = any (==Verbose) flg
+    let parents = elem Parents flg
+        verbose = elem Verbose flg
     if not srcExists 
         then lift usage
         else if not dstExists && parents
@@ -39,9 +40,7 @@ cp v src dst = do
             let src' = src ++ "/" ++ fp
                 dst' = dst ++ "/" ++ fp
             copyFile src' dst'
-            if v 
-                then putStrLn $ "dircp: " ++ src' ++ " --> " ++ dst'
-                else return ()
+            when v $ putStrLn $ "dircp: " ++ src' ++ " --> " ++ dst'
 
 main :: IO ()
 main = do
