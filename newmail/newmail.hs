@@ -1,5 +1,8 @@
+module Main (main) where
+
 import Control.Monad.Writer
 import Data.List
+import Data.Maybe (fromMaybe)
 import System.Directory
 import System.Environment
 import System.Exit
@@ -18,10 +21,8 @@ main :: IO ()
 main = do
     argv <- getArgs
     m <- lookupEnv "MAIL"
-    let mail = case m of
-            Just str -> str
-            Nothing -> ""
-    let spool = case argv of
+    let mail = fromMaybe "" m
+        spool = case argv of
             ("-s":sf:_) -> sf
             _ -> mail
     isFile <- doesFileExist spool
