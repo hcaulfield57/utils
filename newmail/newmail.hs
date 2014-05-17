@@ -1,37 +1,33 @@
-module Main (main) where
+module Main where
 
-import Control.Monad.Writer
-import Data.List
+import Data.List (isPrefixOf)
 import Data.Maybe (fromMaybe)
 import System.Directory
 import System.Environment
 import System.Exit
 import System.IO
+import System.IO.Error
 
-count :: Handle -> WriterT (Sum Int) IO ()
-count h = do
-    line <- lift $ hGetLine h
-    eof <- lift $ hIsEOF h
-    if eof then return ()
-        else if isPrefixOf "From " line 
-            then tell (Sum 1) >> count h
-            else count h
+countMsg :: String -> Int
+countMsg input
+    | "From " `isPrefixOf` input = 1
+    | otherwise                  = 0
 
 main :: IO ()
 main = do
     argv <- getArgs
-    m <- lookupEnv "MAIL"
-    let mail = fromMaybe "" m
+    mail <- lookupEnv "MAIL"
+    let mail' = fromMaybe "" mail
         spool = case argv of
             ("-s":sf:_) -> sf
-            _ -> mail
-    isFile <- doesFileExist spool
-    if isFile then do
-        handle <- openFile spool ReadMode
-        num <- execWriterT (count handle)
-        print $ getSum num
-        else usage
+            _           -> mail'
+    results <- tryIOError $ readFile spool
+    case results of
+        Left err       -> print 0
+        Right contents -> print $ 
+            sum $ map countMsg (lines contents)
 
 usage :: IO ()
-usage = putStrLn "usage: newmail [-s spool]"
-    >> exitWith (ExitFailure 1)
+usage =
+    putStrLn "usage: newmail [-s spool]" >>
+    exitWith (ExitFailure 1)
